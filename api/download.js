@@ -13,27 +13,29 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch(url, {
+    // ڕەوانەکردنی لینکەکە بۆ APIێکی تایبەت بە وەرگرتنی میدیای سناپچات
+    const apiUrl = `https://api.cobalt.tools/api/json`;
+    const response = await fetch(apiUrl, {
+      method: 'POST',
       headers: {
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       },
-      redirect: 'follow'
+      body: JSON.stringify({
+        url: url
+      })
     });
 
-    const html = await response.text();
+    const data = await response.json();
 
-    const videoMatches = html.match(/https:\/\/[^"]+\.mp4[^"]*/g) || 
-                         html.match(/https:\/\/cf-st\.sc-cdn\.net\/[^"]+/g);
-
-    if (videoMatches && videoMatches.length > 0) {
-      let videoUrl = videoMatches[0].replace(/\\u0026/g, '&');
-      return res.status(200).json({ videoUrl: videoUrl });
+    if (data && data.url) {
+      return res.status(200).json({ videoUrl: data.url });
+    } else if (data && data.picker && data.picker.length > 0) {
+      return res.status(200).json({ videoUrl: data.picker[0].url });
     } else {
-      return res.status(404).json({ error: 'نەتوانرا لینکی ڤیدیۆکە لەم ستۆرییە بدۆزرێتەوە' });
+      return res.status(404).json({ error: 'نەتوانرا لینکی ڤیدیۆ لەم ستۆرییە بدۆزرێتەوە' });
     }
   } catch (error) {
-    return res.status(500).json({ error: 'کێشەیەک لە سێرڤەر ڕووی دا' });
+    return res.status(500).json({ error: 'کێشەیەک لە پەیوەندیکردن بە سێرڤەر ڕووی دا' });
   }
 }
