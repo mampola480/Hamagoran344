@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>داگرتنی ستۆری سناپچات</title>
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: rgba(23, 32, 51, 0.85);
+      --primary: #fffc00;
+      --primary-hover: #e6e400;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.1);
+      --success: #22c55e;
+      --error: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(255, 252, 0, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 32px 24px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+
+    .icon-container {
+      width: 60px;
+      height: 60px;
+      background: var(--primary);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px auto;
+      box-shadow: 0 8px 20px rgba(255, 252, 0, 0.2);
+    }
+
+    .icon-container svg {
+      width: 32px;
+      height: 32px;
+      fill: #000;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    input {
+      width: 100%;
+      padding: 16px 70px 16px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background-color: rgba(15, 23, 42, 0.6);
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+      direction: ltr;
+      text-align: left;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 252, 0, 0.15);
+    }
+
+    .paste-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .paste-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .action-btn {
+      width: 100%;
+      padding: 16px;
+      background-color: var(--primary);
+      color: #000;
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(255, 252, 0, 0.15);
+    }
+
+    .action-btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    #result {
+      margin-top: 20px;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 12px;
+      margin-top: 15px;
+      border: 1px solid var(--border);
+    }
+
+    .download-link {
+      display: inline-block;
+      width: 100%;
+      margin-top: 12px;
+      padding: 14px;
+      background-color: var(--success);
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 14px;
+      margin-top: 12px;
+      background: rgba(239, 68, 68, 0.1);
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    footer {
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    footer span {
+      color: var(--primary);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="icon-container">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-4H9l3-3 3 3h-2v4zm0-6h-2V7h2v3z"/>
+      </svg>
+    </div>
+
+    <h1>داگرتنی ستۆری سناپچات</h1>
+    <p class="subtitle">لینکی ستۆریەکە لێرە بنووسە بۆ داگرتنی ڕاستەوخۆی ڤیدیۆکە بە بەرزترین کۆالێتی</p>
+
+    <div class="input-group">
+      <input type="url" id="snapUrl" placeholder="https://snapchat.com/t/..." required />
+      <button class="paste-btn" onclick="pasteLink()">پەیست</button>
+    </div>
+
+    <button class="action-btn" onclick="fetchStory()">داگرتن ↓</button>
+
+    <div id="result"></div>
+
+    <footer>
+      دروست کراوە بە ❤️ لەلایەن <span>mam pola</span>
+    </footer>
+  </div>
+
+  <script>
+    async function pasteLink() {
+      try {
+        const text = await navigator.clipboard.readText();
+        document.getElementById('snapUrl').value = text;
+      } catch (err) {
+        alert('مۆڵەتی کۆپیکردن نەدراوە');
+      }
+    }
+
+    async function fetchStory() {
+      const urlInput = document.getElementById('snapUrl').value.trim();
+      const resultDiv = document.getElementById('result');
+
+      if (!urlInput) {
+        resultDiv.innerHTML = '<div class="error-msg">تکایە لینکێک بنووسە</div>';
+        return;
+      }
+
+      resultDiv.innerHTML = '<p style="color: var(--text-muted); font-size: 14px;">چاوەڕێ بکە...</p>';
+
+      try {
+        const response = await fetch(`/api/download?url=${encodeURIComponent(urlInput)}`);
+        const data = await response.json();
+
+        if (response.ok && data.downloadUrl) {
+          resultDiv.innerHTML = `
+            <video controls autoplay src="${data.downloadUrl}"></video>
+            <a href="${data.downloadUrl}" target="_blank" download class="download-link">داگرتنی ڕاستەوخۆ</a>
+          `;
+        } else {
+          resultDiv.innerHTML = `<div class="error-msg">${data.error || 'هەڵەیەک ڕوویدا'}</div>`;
+        }
+      } catch (err) {
+        resultDiv.innerHTML = '<div class="error-msg">هەڵەیەک لە پەیوەندیدا ڕوویدا. تکایە دووبارە هەوڵبدەرەوە.</div>';
+      }
+    }
+  </script>
+
+</body>
+</html>
